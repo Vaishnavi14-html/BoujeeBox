@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoujeeBox | Trendy Fashion & Beauty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #faf9f6;
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f5d9ff 0%, #fff4e6 100%);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #e86a92;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #d8b4fe;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c084fc;
+        }
+        
+        /* Animation for product cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-[#faf9f6]">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0 flex items-center">
+                        <span class="title-font text-2xl font-bold text-pink-500">Boujee<span class="text-purple-400">Box</span></span>
+                    </a>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#" class="border-pink-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <a href="#shop" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Shop</a>
+                        <a href="#collections" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Collections</a>
+                        <a href="#about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">About</a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search..." class="bg-gray-100 rounded-full py-1 px-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 w-64">
+                        <i class="fas fa-search absolute left-3 top-2 text-gray-400"></i>
+                    </div>
+                    <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+                        <i class="far fa-heart text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none" id="cart-btn">
+                            <i class="fas fa-shopping-bag text-xl"></i>
+                            <span class="cart-badge hidden">0</span>
+                        </button>
+                    </div>
+                    <button class="bg-gradient-to-r from-pink-400 to-purple-400 text-white px-4 py-1 rounded-full text-sm font-medium hover:opacity-90 transition">Sign In</button>
+                </div>
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500" id="mobile-menu-button">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="hidden sm:hidden bg-white shadow-lg" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1 px-4">
+                <a href="#" class="bg-pink-50 border-pink-500 text-pink-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+                <a href="#shop" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Shop</a>
+                <a href="#collections" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Collections</a>
+                <a href="#about" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About</a>
+                <div class="pt-4 pb-3 border-t border-gray-200">
+                    <div class="flex items-center px-4 space-x-3">
+                        <div class="relative flex-1">
+                            <input type="text" placeholder="Search..." class="bg-gray-100 rounded-full py-1 px-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 w-full">
+                            <i class="fas fa-search absolute left-3 top-2 text-gray-400"></i>
+                        </div>
+                        <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+                            <i class="far fa-heart text-xl"></i>
+                        </button>
+                        <div class="relative">
+                            <button class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none">
+                                <i class="fas fa-shopping-bag text-xl"></i>
+                                <span class="cart-badge hidden">0</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-3 space-y-1 px-4">
+                        <button class="w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition">Sign In</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="text-center md:text-left">
+                    <h1 class="title-font text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6">Elevate Your Everyday</h1>
+                    <p class="text-lg text-gray-600 mb-8 max-w-lg">Curated collections of the most boujee fashion, beauty & lifestyle essentials for the modern trendsetter.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="#shop" class="bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-full font-medium transition duration-300 shadow-lg hover:shadow-xl">Shop Now</a>
+                        <a href="#collections" class="bg-white hover:bg-gray-50 text-gray-800 px-8 py-3 rounded-full font-medium transition duration-300 shadow-lg hover:shadow-xl">Explore Collections</a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80" alt="BoujeeBox Products" class="rounded-2xl shadow-2xl w-full h-auto max-h-[500px] object-cover">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-lg hidden md:block">
+                        <div class="flex items-center">
+                            <div class="bg-pink-100 p-3 rounded-full mr-3">
+                                <i class="fas fa-star text-pink-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">4.9/5 Stars</p>
+                                <p class="text-sm text-gray-500">From 2K+ Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-white" id="collections">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="title-font text-3xl font-bold text-gray-800 mb-4">Our Collections</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">Discover your perfect aesthetic with our carefully curated categories</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <a href="#" class="category-card group relative overflow-hidden rounded-2xl shadow-md h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80" alt="Fashion" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <h3 class="text-white font-bold text-xl">Fashion</h3>
+                    </div>
+                </a>
+                
+                <a href="#" class="category-card group relative overflow-hidden rounded-2xl shadow-md h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Beauty" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <h3 class="text-white font-bold text-xl">Beauty</h3>
+                    </div>
+                </a>
+                
+                <a href="#" class="category-card group relative overflow-hidden rounded-2xl shadow-md h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Lifestyle" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <h3 class="text-white font-bold text-xl">Lifestyle</h3>
+                    </div>
+                </a>
+                
+                <a href="#" class="category-card group relative overflow-hidden rounded-2xl shadow-md h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1128&q=80" alt="Accessories" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <h3 class="text-white font-bold text-xl">Accessories</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16 bg-[#faf9f6]" id="shop">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                <div>
+                    <h2 class="title-font text-3xl font-bold text-gray-800 mb-2">Trending Now</h2>
+                    <p class="text-gray-500">What's hot in the boujee community</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 bg-white rounded-full text-sm font-medium shadow-sm">All</button>
+                        <button class="px-4 py-2 bg-white rounded-full text-sm font-medium shadow-sm">Fashion</button>
+                        <button class="px-4 py-2 bg-white rounded-full text-sm font-medium shadow-sm">Beauty</button>
+                        <button class="px-4 py-2 bg-white rounded-full text-sm font-medium shadow-sm">Lifestyle</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md animate-fade-in">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80" alt="Silk Scrunchie Set" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md text-gray-400 hover:text-pink-500">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <span class="absolute top-3 left-3 bg-pink-500 text-white text-xs font-bold px-2 py-1 rounded-full">BESTSELLER</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Silk Scrunchie Set</h3>
+                                <p class="text-gray-500 text-sm">3-piece set</p>
+                            </div>
+                            <span class="font-bold text-pink-500">$24.99</span>
+                        </div>
+                        <div class="mt-3 flex justify-between items-center">
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-gray-400 ml-1">(128)</span>
+                            </div>
+                            <button class="add-to-cart bg-pink-100 text-pink-600 p-2 rounded-full hover:bg-pink-200 transition">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md animate-fade-in delay-100">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80" alt="Glossy Lip Oil" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md text-gray-400 hover:text-pink-500">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Glossy Lip Oil</h3>
+                                <p class="text-gray-500 text-sm">4 shades</p>
+                            </div>
+                            <span class="font-bold text-pink-500">$18.99</span>
+                        </div>
+                        <div class="mt-3 flex justify-between items-center">
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span class="text-gray-400 ml-1">(96)</span>
+                            </div>
+                            <button class="add-to-cart bg-pink-100 text-pink-600 p-2 rounded-full hover:bg-pink-200 transition">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md animate-fade-in delay-200">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" alt="Velvet Hair Clips" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md text-gray-400 hover:text-pink-500">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <span class="absolute top-3 left-3 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full">NEW</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Velvet Hair Clips</h3>
+                                <p class="text-gray-500 text-sm">Set of 5</p>
+                            </div>
+                            <span class="font-bold text-pink-500">$22.99</span>
+                        </div>
+                        <div class="mt-3 flex justify-between items-center">
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-gray-400 ml-1">(204)</span>
+                            </div>
+                            <button class="add-to-cart bg-pink-100 text-pink-600 p-2 rounded-full hover:bg-pink-200 transition">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-xl overflow-hidden shadow-md animate-fade-in delay-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80" alt="Satin Sleep Mask" class="w-full h-64 object-cover">
+                        <button class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md text-gray-400 hover:text-pink-500">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-gray-800">Satin Sleep Mask</h3>
+                                <p class="text-gray-500 text-sm">3 colors</p>
+                            </div>
+                            <span class="font-bold text-pink-500">$19.99</span>
+                        </div>
+                        <div class="mt-3 flex justify-between items-center">
+                            <div class="flex text-yellow-400 text-sm">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-gray-400 ml-1">(176)</span>
+                            </div>
+                            <button class="add-to-cart bg-pink-100 text-pink-600 p-2 rounded-full hover:bg-pink-200 transition">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="#" class="inline-block px-8 py-3 bg-white text-pink-500 rounded-full font-medium shadow-md hover:shadow-lg transition">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="title-font text-3xl font-bold text-gray-800 mb-4">Boujee Babes Love Us</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">Don't just take our word for it - hear what our community has to say</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-pink-50 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">2 days ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The silk scrunchies are absolutely worth the hype! My hair has never looked better and they're so gentle."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sophia" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Sophia R.</h4>
+                            <p class="text-sm text-gray-500">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-pink-50 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">1 week ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"I'm obsessed with the lip oils! Perfect amount of shine without being sticky. Will definitely repurchase."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Emma" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Emma L.</h4>
+                            <p class="text-sm text-gray-500">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-pink-50 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">3 weeks ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The sleep mask is a game changer! Super soft and actually stays on all night. Love the lavender color."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Olivia" class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-bold text-gray-800">Olivia M.</h4>
+                            <p class="text-sm text-gray-500">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="title-font text-3xl font-bold text-gray-800 mb-4">Join the Boujee Club</h2>
+            <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Subscribe to get exclusive offers, early access to new drops, and 10% off your first order.</p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-300">
+                <button class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-medium transition duration-300 shadow-lg hover:shadow-xl">Subscribe</button>
+            </div>
+            
+            <p class="text-xs text-gray-500 mt-4">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-16 bg-white" id="about">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="title-font text-3xl font-bold text-gray-800 mb-6">Our Story</h2>
+                    <p class="text-gray-600 mb-4">BoujeeBox was born from a simple idea: that luxury should be accessible, fun, and unapologetically extra. Founded in 2022 by two best friends who were tired of compromising between quality and aesthetics, we set out to create a brand that celebrates self-expression through beautifully designed everyday essentials.</p>
+                    <p class="text-gray-600 mb-6">Every product in our collection is carefully curated and designed with intention, blending functionality with that Instagram-worthy aesthetic we all crave.</p>
+                    <a href="#" class="inline-block px-6 py-2 border-2 border-pink-400 text-pink-500 rounded-full font-medium hover:bg-pink-50 transition">Learn More</a>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Our Team" class="rounded-xl h-64 w-full object-cover shadow-md">
+                    <img src="https://images.unsplash.com/photo-1556228578-8c6dacdc6a6c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Our Products" class="rounded-xl h-64 w-full object-cover shadow-md mt-8">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Feed -->
+    <section class="py-16 bg-[#faf9f6]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="title-font text-3xl font-bold text-gray-800 mb-4">#BoujeeBox</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">Tag us for a chance to be featured!</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="#" class="group relative overflow-hidden rounded-xl h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <i class="fab fa-instagram text-white text-2xl"></i>
+                    </div>
+                </a>
+                
+                <a href="#" class="group relative overflow-hidden rounded-xl h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <i class="fab fa-instagram text-white text-2xl"></i>
+                    </div>
+                </a>
+                
+                <a href="#" class="group relative overflow-hidden rounded-xl h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <i class="fab fa-instagram text-white text-2xl"></i>
+                    </div>
+                </a>
+                
+                <a href="#" class="group relative overflow-hidden rounded-xl h-48 md:h-64">
+                    <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <i class="fab fa-instagram text-white text-2xl"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <h3 class="title-font text-2xl font-bold text-pink-400 mb-4">Boujee<span class="text-purple-300">Box</span></h3>
+                    <p class="text-gray-300 mb-4">Elevating your everyday with curated luxury essentials.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-pink-400"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-pink-400"><i class="fab fa-tiktok text-xl"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-pink-400"><i class="fab fa-pinterest text-xl"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-pink-400"><i class="fab fa-twitter text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Shop</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">All Products</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Bestsellers</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Sale</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Gift Cards</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Help</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">FAQs</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Track Order</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-pink-400">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-pink-400 mr-2"></i>
+                            <span class="text-gray-300">123 Boujee Ave, Suite 456<br>Los Angeles, CA 90069</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-pink-400 mr-2"></i>
+                            <span class="text-gray-300">hello@boujeebox.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt text-pink-400 mr-2"></i>
+                            <span class="text-gray-300">(555) 123-4567</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 BoujeeBox. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa" class="h-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="Mastercard" class="h-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196566.png" alt="American Express" class="h-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196554.png" alt="PayPal" class="h-8">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="fixed inset-0 z-50 overflow-hidden hidden" id="cart-sidebar">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" id="cart-overlay"></div>
+            <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+                <div class="w-screen max-w-md">
+                    <div class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
+                        <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+                            <div class="flex items-start justify-between">
+                                <h2 class="title-font text-lg font-medium text-gray-900">Shopping cart</h2>
+                                <div class="ml-3 h-7 flex items-center">
+                                    <button type="button" class="-m-2 p-2 text-gray-400 hover:text-gray-500" id="close-cart">
+                                        <span class="sr-only">Close panel</span>
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mt-8">
+                                <div class="flow-root">
+                                    <ul role="list" class="-my-6 divide-y divide-gray-200" id="cart-items">
+                                        <!-- Cart items will be added here dynamically -->
+                                        <li class="py-6 flex text-center">
+                                            <p class="text-gray-500">Your cart is empty</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
+                            <div class="flex justify-between text-base font-medium text-gray-900 mb-4">
+                                <p>Subtotal</p>
+                                <p id="cart-total">$0.00</p>
+                            </div>
+                            <p class="mt-0.5 text-sm text-gray-500 mb-6">Shipping and taxes calculated at checkout.</p>
+                            <button class="w-full bg-gradient-to-r from-pink-400 to-purple-400 text-white px-6 py-3 rounded-full font-medium transition duration-300 shadow-lg hover:shadow-xl">Checkout</button>
+                            <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
+                                <p>
+                                    or 
+                                    <button type="button" class="text-pink-500 font-medium hover:text-pink-400 ml-1" id="continue-shopping">Continue Shopping</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="fixed z-50 inset-0 overflow-y-auto hidden" id="login-modal">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75" id="login-overlay"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="title-font text-2xl leading-6 font-bold text-gray-900" id="modal-title">Welcome Back</h3>
+                                <button type="button" class="text-gray-400 hover:text-gray-500" id="close-login">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <form class="space-y-6">
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                                        <div class="mt-1">
+                                            <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                        <div class="mt-1">
+                                            <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm">
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-pink-500 focus:ring-pink-500 border-gray-300 rounded">
+                                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
+                                        </div>
+
+                                        <div class="text-sm">
+                                            <a href="#" class="font-medium text-pink-500 hover:text-pink-400">Forgot your password?</a>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">Sign in</button>
+                                    </div>
+                                </form>
+                                <div class="mt-6">
+                                    <div class="relative">
+                                        <div class="absolute inset-0 flex items-center">
+                                            <div class="w-full border-t border-gray-300"></div>
+                                        </div>
+                                        <div class="relative flex justify-center text-sm">
+                                            <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-6 grid grid-cols-2 gap-3">
+                                        <div>
+                                            <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                                <i class="fab fa-google text-pink-500"></i>
+                                            </a>
+                                        </div>
+
+                                        <div>
+                                            <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                                <i class="fab fa-apple"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-6 text-center">
+                                    <p class="text-sm text-gray-500">
+                                        Don't have an account? 
+                                        <a href="#" class="font-medium text-pink-500 hover:text-pink-400">Sign up</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+        
+        // Cart functionality
+        const cartButton = document.getElementById('cart-btn');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const closeCart = document.getElementById('close-cart');
+        const continueShopping = document.getElementById('continue-shopping');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartBadge = document.querySelector('.cart-badge');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        // Sample products data
+        const products = [
+            {
+                id: 1,
+                name: 'Silk Scrunchie Set',
+                description: '3-piece set',
+                price: 24.99,
+                image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80',
+                quantity: 1
+            },
+            {
+                id: 2,
+                name: 'Glossy Lip Oil',
+                description: '4 shades',
+                price: 18.99,
+                image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80',
+                quantity: 1
+            },
+            {
+                id: 3,
+                name: 'Velvet Hair Clips',
+                description: 'Set of 5',
+                price: 22.99,
+                image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
+                quantity: 1
+            },
+            {
+                id: 4,
+                name: 'Satin Sleep Mask',
+                description: '3 colors',
+                price: 19.99,
+                image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+                quantity: 1
+            }
+        ];
+        
+        let cart = [];
+        
+        // Toggle cart sidebar
+        function toggleCart() {
+            const isHidden = cartSidebar.classList.contains('hidden');
+            if (isHidden) {
+                cartSidebar.classList.remove('hidden');
+                renderCartItems();
+            } else {
+                cartSidebar.classList.add('hidden');
+            }
+        }
+        
+        cartButton.addEventListener('click', toggleCart);
+        cartOverlay.addEventListener('click', toggleCart);
+        closeCart.addEventListener('click', toggleCart);
+        continueShopping.addEventListener('click', toggleCart);
+        
+        // Add to cart functionality
+        addToCartButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                const product = products[index];
+                const existingItem = cart.find(item => item.id === product.id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({...product});
+                }
+                
+                updateCartBadge();
+                showAddedToCartToast(product.name);
+            });
+        });
+        
+        // Update cart badge
+        function updateCartBadge() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            if (totalItems > 0) {
+                cartBadge.textContent = totalItems;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+        }
+        
+        // Render cart items
+        function renderCartItems() {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<li class="py-6 flex text-center"><p class="text-gray-500">Your cart is empty</p></li>';
+                cartTotal.textContent = '$0.00';
+                return;
+            }
+            
+            cartItemsContainer.innerHTML = '';
+            
+            cart.forEach(item => {
+                const cartItem = document.createElement('li');
+                cartItem.className = 'py-6 flex';
+                cartItem.innerHTML = `
+                    <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-center object-cover">
+                    </div>
+                    <div class="ml-4 flex-1 flex flex-col">
+                        <div>
+                            <div class="flex justify-between text-base font-medium text-gray-900">
+                                <h3>${item.name}</h3>
+                                <p class="ml-4">$${(item.price * item.quantity).toFixed(2)}</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">${item.description}</p>
+                        </div>
+                        <div class="flex-1 flex items-end justify-between text-sm">
+                            <div class="flex items-center border border-gray-300 rounded-md">
+                                <button class="quantity-decrease px-2 py-1" data-id="${item.id}">-</button>
+                                <span class="px-2">${item.quantity}</span>
+                                <button class="quantity-increase px-2 py-1" data-id="${item.id}">+</button>
+                            </div>
+                            <button type="button" class="font-medium text-pink-500 hover:text-pink-400 remove-item" data-id="${item.id}">Remove</button>
+                        </div>
+                    </div>
+                `;
+                
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            // Calculate total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `$${total.toFixed(2)}`;
+            
+            // Add event listeners to quantity buttons
+            document.querySelectorAll('.quantity-increase').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === id);
+                    if (item) {
+                        item.quantity += 1;
+                        renderCartItems();
+                        updateCartBadge();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.quantity-decrease').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === id);
+                    if (item && item.quantity > 1) {
+                        item.quantity -= 1;
+                        renderCartItems();
+                        updateCartBadge();
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.getAttribute('data-id'));
+                    cart = cart.filter(item => item.id !== id);
+                    renderCartItems();
+                    updateCartBadge();
+                });
+            });
+        }
+        
+        // Show "added to cart" toast
+        function showAddedToCartToast(productName) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>${productName} added to cart!</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 2000);
+        }
+        
+        // Login modal functionality
+        const loginButton = document.querySelector('nav button.bg-gradient-to-r');
+        const loginModal = document.getElementById('login-modal');
+        const loginOverlay = document.getElementById('login-overlay');
+        const closeLogin = document.getElementById('close-login');
+        
+        if (loginButton) {
+            loginButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.classList.remove('hidden');
+            });
+        }
+        
+        if (loginOverlay) {
+            loginOverlay.addEventListener('click', () => {
+                loginModal.classList.add('hidden');
+            });
+        }
+        
+        if (closeLogin) {
+            closeLogin.addEventListener('click', () => {
+                loginModal.classList.add('hidden');
+            });
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
